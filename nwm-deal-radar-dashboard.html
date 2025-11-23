@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>NWM Deal Radar™ - Real Estate Intelligence</title>
   <style>
     /* ===== DESIGN SYSTEM ===== */
@@ -746,9 +747,266 @@
     .mb-16 { margin-bottom: 16px; }
     .mb-24 { margin-bottom: 24px; }
     .mb-32 { margin-bottom: 32px; }
+
+    /* ===== DEMO LOGIN OVERLAY ===== */
+    #demoAuth {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-body);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #demoAuth.hidden {
+      display: none !important;
+    }
+
+    .login-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 48px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+    }
+
+    .login-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--bg-body);
+      margin: 0 auto 24px;
+    }
+
+    .login-title {
+      font-size: 24px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .login-subtitle {
+      font-size: 14px;
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .form-input {
+      background: var(--bg-card-soft);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    .login-btn {
+      background: var(--accent-primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .login-btn:hover {
+      background: #ea580c;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.3);
+    }
+
+    .login-error {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--accent-red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      text-align: center;
+      display: none;
+    }
+
+    .login-error.show {
+      display: block;
+    }
+
+    .demo-credentials {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .demo-credentials strong {
+      color: var(--text-main);
+    }
+
+    /* ===== DEMO MODE BADGE ===== */
+    #demo-mode-badge {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 999;
+      background: rgba(249, 115, 22, 0.15);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: none;
+    }
+
+    #demo-mode-badge.show {
+      display: block;
+    }
+
+    /* ===== EXPORT BUTTONS ===== */
+    .export-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-export {
+      background: var(--bg-card-soft);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-export:hover {
+      background: var(--accent-primary);
+      color: white;
+      border-color: var(--accent-primary);
+    }
+
+    .btn-export.hidden {
+      display: none !important;
+    }
+
+    /* ===== TIER GATING ===== */
+    [data-tier="pro"] {
+      /* Will be hidden for non-pro users via JS */
+    }
+
+    [data-tier="analyst"] {
+      /* Will be hidden for scout users via JS */
+    }
+
+    /* ===== CLICKSITES COMPATIBILITY ===== */
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .login-container {
+        padding: 32px 24px;
+      }
+    }
   </style>
 </head>
 <body>
+
+  <!-- DEMO LOGIN OVERLAY -->
+  <div id="demoAuth">
+    <div class="login-container">
+      <div class="login-logo">NR</div>
+      <div class="login-title">NWM Deal Radar™</div>
+      <div class="login-subtitle">Real Estate Intelligence Platform</div>
+
+      <form class="login-form" id="loginForm">
+        <div class="login-error" id="loginError">Invalid credentials. Please try again.</div>
+
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input type="text" id="username" class="form-input" placeholder="Enter username" autocomplete="username" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="Enter password" autocomplete="current-password" required>
+        </div>
+
+        <button type="submit" class="login-btn">Access Demo</button>
+      </form>
+
+      <div class="demo-credentials">
+        <div style="margin-bottom: 8px;"><strong>Demo Credentials:</strong></div>
+        <div style="font-family: monospace; font-size: 11px;">
+          Admin: <strong>admin</strong> / <strong>admin123</strong><br>
+          User: <strong>user</strong> / <strong>user123</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEMO MODE BADGE -->
+  <div id="demo-mode-badge">
+    DEMO MODE — NWM Deal Radar
+  </div>
 
   <!-- ROLE SWITCHER -->
   <div id="role-switcher">
@@ -851,7 +1109,17 @@
                   <div class="card-title">Top Hot Streets – This Week</div>
                   <div class="card-subtitle">Ranked by combined permit + distress + investor activity</div>
                 </div>
-                <div class="card-header-chip">Beta View</div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div class="export-buttons" data-tier="pro">
+                    <button class="btn-export" id="exportCSV" title="Export as CSV">
+                      📊 CSV
+                    </button>
+                    <button class="btn-export" id="exportPDF" title="Export as PDF">
+                      📄 PDF
+                    </button>
+                  </div>
+                  <div class="card-header-chip">Beta View</div>
+                </div>
               </div>
               <div class="card-body" style="padding: 0;">
                 <table id="hot-streets-table">
@@ -993,7 +1261,7 @@
             </div>
 
             <!-- PLAYBOOKS -->
-            <div class="card">
+            <div class="card" data-tier="analyst">
               <div class="card-header">
                 <div class="card-header-left">
                   <div class="card-title">Action Playbooks</div>
@@ -1178,6 +1446,205 @@
   </div>
 
   <script>
+    // ===== CONFIGURATION =====
+    const DEV_MODE = false; // Set to true to show role switcher for development
+
+    // ===== GOOGLE APPS SCRIPT API ENDPOINTS =====
+    const API = {
+      USER: "PASTE_USER_ENDPOINT_HERE",  // User dashboard data endpoint
+      ADMIN: "PASTE_ADMIN_ENDPOINT_HERE" // Admin portal data endpoint
+    };
+
+    // ===== AUTHENTICATION SYSTEM =====
+    const AUTH_CREDENTIALS = {
+      admin: atob("YWRtaW4xMjM="), // admin123
+      user: atob("dXNlcjEyMw==")    // user123
+    };
+
+    const TIER_MAP = {
+      user: 'scout',
+      admin: 'pro'
+    };
+
+    let currentUser = null;
+    let currentRole = null;
+    let currentTier = null;
+
+    function initAuth() {
+      // Check for existing session
+      const session = localStorage.getItem('demoSession');
+      if (session) {
+        try {
+          const sessionData = JSON.parse(session);
+          if (sessionData.username && sessionData.timestamp) {
+            // Session valid for 24 hours
+            const hoursPassed = (Date.now() - sessionData.timestamp) / (1000 * 60 * 60);
+            if (hoursPassed < 24) {
+              currentUser = sessionData.username;
+              currentRole = sessionData.role;
+              currentTier = sessionData.tier;
+              hideAuthOverlay();
+              applyTierGating();
+              logActivity(`Login`, `Session restored for ${currentRole}`);
+              return;
+            }
+          }
+        } catch (e) {
+          console.error('Session parse error:', e);
+        }
+      }
+
+      // Show auth overlay if no valid session
+      document.getElementById('demoAuth').classList.remove('hidden');
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('loginError');
+
+      // Validate credentials
+      if (AUTH_CREDENTIALS[username] === password) {
+        // Successful login
+        currentUser = username;
+        currentRole = username; // 'admin' or 'user'
+        currentTier = TIER_MAP[username];
+
+        // Save session
+        const sessionData = {
+          username: currentUser,
+          role: currentRole,
+          tier: currentTier,
+          timestamp: Date.now()
+        };
+        localStorage.setItem('demoSession', JSON.stringify(sessionData));
+
+        // Hide auth overlay
+        hideAuthOverlay();
+
+        // Show appropriate dashboard
+        switchRole(currentRole);
+
+        // Apply tier gating
+        applyTierGating();
+
+        // Log activity
+        logActivity(`Login`, `${currentRole} accessed demo`);
+
+        // Reset form
+        document.getElementById('loginForm').reset();
+        errorEl.classList.remove('show');
+      } else {
+        // Failed login
+        errorEl.classList.add('show');
+        setTimeout(() => errorEl.classList.remove('show'), 3000);
+      }
+    }
+
+    function hideAuthOverlay() {
+      document.getElementById('demoAuth').classList.add('hidden');
+      document.getElementById('demo-mode-badge').classList.add('show');
+
+      // Hide role switcher unless in dev mode
+      if (!DEV_MODE) {
+        document.getElementById('role-switcher').style.display = 'none';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('demoSession');
+      location.reload();
+    }
+
+    // ===== TIER GATING SYSTEM =====
+    function applyTierGating() {
+      const tierElements = document.querySelectorAll('[data-tier]');
+
+      tierElements.forEach(el => {
+        const requiredTier = el.getAttribute('data-tier');
+
+        // Hide elements based on tier
+        if (requiredTier === 'pro' && currentTier !== 'pro') {
+          el.classList.add('hidden');
+        } else if (requiredTier === 'analyst' && currentTier === 'scout') {
+          el.classList.add('hidden');
+        } else {
+          el.classList.remove('hidden');
+        }
+      });
+    }
+
+    // ===== EXPORT FUNCTIONS =====
+    function exportToCSV() {
+      const table = document.getElementById('hot-streets-table');
+      let csv = [];
+
+      // Get headers
+      const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
+      csv.push(headers.join(','));
+
+      // Get data rows
+      const rows = table.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        const cells = Array.from(row.querySelectorAll('td')).map(td => {
+          // Clean text content
+          return `"${td.textContent.trim().replace(/"/g, '""')}"`;
+        });
+        csv.push(cells.join(','));
+      });
+
+      // Download
+      const csvContent = csv.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `nwm-deal-radar-hot-streets-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      logActivity('Export', 'Downloaded Hot Streets CSV');
+    }
+
+    function exportToPDF() {
+      // Simplified PDF export (in production, use a library like jsPDF)
+      alert('PDF export feature coming soon! For now, use Print to PDF from your browser menu.');
+      logActivity('Export', 'Attempted PDF export');
+    }
+
+    // ===== ACTIVITY LOGGING =====
+    function logActivity(action, detail) {
+      const activityLog = JSON.parse(localStorage.getItem('activityLog') || '[]');
+      const entry = {
+        time: new Date().toISOString(),
+        user: currentUser || 'Unknown',
+        action: action,
+        detail: detail
+      };
+      activityLog.unshift(entry);
+
+      // Keep only last 100 entries
+      if (activityLog.length > 100) {
+        activityLog.length = 100;
+      }
+
+      localStorage.setItem('activityLog', JSON.stringify(activityLog));
+    }
+
+    function getActivityLog() {
+      return JSON.parse(localStorage.getItem('activityLog') || '[]');
+    }
+
+    function resetDemo() {
+      if (confirm('Reset demo? This will clear all activity logs and log you out.')) {
+        localStorage.removeItem('demoSession');
+        localStorage.removeItem('activityLog');
+        location.reload();
+      }
+    }
+
     // ===== MOCK DATA =====
 
     // User Dashboard Mock Data
@@ -1515,11 +1982,31 @@
     // ===== LOAD ON PAGE READY =====
 
     document.addEventListener('DOMContentLoaded', () => {
+      // Initialize authentication
+      initAuth();
+
+      // Set up login form handler
+      document.getElementById('loginForm').addEventListener('submit', handleLogin);
+
+      // Set up export button handlers
+      const csvBtn = document.getElementById('exportCSV');
+      const pdfBtn = document.getElementById('exportPDF');
+      if (csvBtn) csvBtn.addEventListener('click', exportToCSV);
+      if (pdfBtn) pdfBtn.addEventListener('click', exportToPDF);
+
+      // Initialize dashboards
       initUserDashboard();
       initAdminPortal();
 
       // Update time every minute
       setInterval(updateCurrentTime, 60000);
+
+      // Apply tier gating after dashboards are initialized
+      setTimeout(() => {
+        if (currentTier) {
+          applyTierGating();
+        }
+      }, 100);
     });
   </script>
 

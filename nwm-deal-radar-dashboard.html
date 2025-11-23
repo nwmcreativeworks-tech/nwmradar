@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NWM Deal Radar™ - Real Estate Intelligence</title>
+  <style>
+    /* ===== DESIGN SYSTEM ===== */
+    :root {
+      --bg-body: #020617;
+      --bg-card: #0b1220;
+      --bg-card-soft: #0f172a;
+      --accent-primary: #f97316;
+      --accent-gold: #facc15;
+      --accent-green: #22c55e;
+      --accent-red: #ef4444;
+      --accent-blue: #2563eb;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --nav-width: 240px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    /* ===== ROLE SWITCHER ===== */
+    #role-switcher {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 1000;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 8px 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    #role-switcher label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    #role-select {
+      background: var(--bg-card-soft);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    #role-select:hover {
+      border-color: var(--accent-primary);
+    }
+
+    #role-select:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+
+    /* ===== LAYOUT ===== */
+    .dashboard-container {
+      display: grid;
+      grid-template-columns: var(--nav-width) 1fr;
+      min-height: 100vh;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-card-soft) 100%);
+      border-right: 1px solid var(--border-subtle);
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .brand-block {
+      padding: 0 20px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 24px;
+    }
+
+    .brand-logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--bg-body);
+      margin-bottom: 12px;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .nav-section {
+      margin-bottom: 24px;
+      padding: 0 12px;
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      padding: 0 12px 8px;
+      font-weight: 600;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 10px 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.2s;
+      margin-bottom: 4px;
+    }
+
+    .nav-link:hover {
+      background: rgba(249, 115, 22, 0.1);
+      color: var(--accent-primary);
+    }
+
+    .nav-link.active {
+      background: linear-gradient(90deg, rgba(249, 115, 22, 0.15), rgba(249, 115, 22, 0.05));
+      color: var(--accent-primary);
+      font-weight: 500;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      background: var(--bg-body);
+      overflow-y: auto;
+    }
+
+    /* ===== TOPBAR ===== */
+    .topbar {
+      background: rgba(11, 18, 32, 0.7);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar-left {
+      flex: 1;
+    }
+
+    .topbar-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .topbar-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge.market {
+      background: rgba(37, 99, 235, 0.15);
+      color: var(--accent-blue);
+    }
+
+    .badge.tier {
+      background: rgba(250, 204, 21, 0.15);
+      color: var(--accent-gold);
+    }
+
+    .badge.owner {
+      background: rgba(249, 115, 22, 0.15);
+      color: var(--accent-primary);
+    }
+
+    .topbar-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-pill {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-pill.live {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--accent-green);
+    }
+
+    .status-pill::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-card);
+      padding: 6px 12px 6px 6px;
+      border-radius: 24px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--bg-body);
+    }
+
+    .user-info {
+      text-align: left;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .user-email {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.2;
+    }
+
+    /* ===== CONTENT AREA ===== */
+    .content-area {
+      padding: 32px;
+    }
+
+    /* ===== KPI ROW ===== */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      border-color: rgba(249, 115, 22, 0.3);
+    }
+
+    .kpi-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .kpi-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .kpi-subtext {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .kpi-subtext.trend-up {
+      color: var(--accent-green);
+    }
+
+    /* ===== GRID LAYOUTS ===== */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 2.2fr 1.8fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .card-header-left {
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .card-header-chip {
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      background: rgba(249, 115, 22, 0.15);
+      color: var(--accent-primary);
+    }
+
+    .card-body {
+      padding: 24px;
+    }
+
+    /* ===== TABLES ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: var(--bg-card-soft);
+    }
+
+    th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border-subtle);
+      transition: background 0.2s;
+    }
+
+    tbody tr:hover {
+      background: rgba(249, 115, 22, 0.05);
+    }
+
+    td {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .pill.hot {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--accent-red);
+    }
+
+    .pill.warm {
+      background: rgba(250, 204, 21, 0.15);
+      color: var(--accent-gold);
+    }
+
+    .pill.emerging {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--accent-green);
+    }
+
+    .pill.cool {
+      background: rgba(156, 163, 175, 0.15);
+      color: var(--text-muted);
+    }
+
+    .pill.new {
+      background: rgba(37, 99, 235, 0.15);
+      color: var(--accent-blue);
+    }
+
+    .pill.contacted {
+      background: rgba(250, 204, 21, 0.15);
+      color: var(--accent-gold);
+    }
+
+    .pill.converted {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--accent-green);
+    }
+
+    .pill.closed {
+      background: rgba(156, 163, 175, 0.15);
+      color: var(--text-muted);
+    }
+
+    .pill.active {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--accent-green);
+    }
+
+    .pill.pending {
+      background: rgba(250, 204, 21, 0.15);
+      color: var(--accent-gold);
+    }
+
+    .score-badge {
+      font-weight: 700;
+      color: var(--accent-primary);
+    }
+
+    /* ===== ALERTS LIST ===== */
+    .alerts-list {
+      margin-top: 24px;
+    }
+
+    .alert-item {
+      padding: 16px;
+      background: var(--bg-card-soft);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border-left: 3px solid var(--accent-primary);
+    }
+
+    .alert-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .alert-tag {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(249, 115, 22, 0.15);
+      color: var(--accent-primary);
+    }
+
+    .alert-timestamp {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .alert-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .alert-body {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ===== HEAT MAP ===== */
+    .heat-map-container {
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(250, 204, 21, 0.1));
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .heat-map-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      margin: 24px 0;
+    }
+
+    .heat-cell {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--bg-card-soft);
+      opacity: 0.6;
+    }
+
+    .heat-cell.hot {
+      background: var(--accent-red);
+      opacity: 0.8;
+    }
+
+    .heat-cell.medium {
+      background: var(--accent-gold);
+      opacity: 0.6;
+    }
+
+    .heat-cell.emerging {
+      background: var(--accent-green);
+      opacity: 0.4;
+    }
+
+    .heat-legend {
+      display: flex;
+      gap: 20px;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .map-footer {
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--accent-primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      margin-top: 16px;
+    }
+
+    .btn:hover {
+      background: #ea580c;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+    }
+
+    /* ===== PLAYBOOKS ===== */
+    .playbook-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .playbook-card {
+      background: var(--bg-card-soft);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 16px;
+      transition: all 0.2s;
+    }
+
+    .playbook-card:hover {
+      border-color: var(--accent-primary);
+      transform: translateX(4px);
+    }
+
+    .playbook-tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(37, 99, 235, 0.15);
+      color: var(--accent-blue);
+      margin-bottom: 8px;
+    }
+
+    .playbook-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .playbook-body {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1200px) {
+      .two-col-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .kpi-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .kpi-row {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        padding: 12px 16px;
+      }
+
+      .content-area {
+        padding: 16px;
+      }
+
+      .topbar-badges {
+        font-size: 11px;
+      }
+
+      .user-chip {
+        font-size: 12px;
+      }
+    }
+
+    /* ===== UTILITIES ===== */
+    .hidden {
+      display: none !important;
+    }
+
+    .text-trend-up {
+      color: var(--accent-green);
+    }
+
+    .text-trend-down {
+      color: var(--accent-red);
+    }
+
+    .mb-0 { margin-bottom: 0; }
+    .mb-16 { margin-bottom: 16px; }
+    .mb-24 { margin-bottom: 24px; }
+    .mb-32 { margin-bottom: 32px; }
+  </style>
+</head>
+<body>
+
+  <!-- ROLE SWITCHER -->
+  <div id="role-switcher">
+    <label>
+      View:
+      <select id="role-select">
+        <option value="user">User Dashboard</option>
+        <option value="admin">Admin Portal</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- ===== USER DASHBOARD ROOT ===== -->
+  <div id="user-dashboard-root">
+    <div class="dashboard-container">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="brand-block">
+          <div class="brand-logo">NR</div>
+          <div class="brand-title">NWM Deal Radar</div>
+          <div class="brand-subtitle">Real Estate Intelligence</div>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="#" class="nav-link active">Dashboard</a>
+          <a href="#" class="nav-link">Hot Streets</a>
+          <a href="#" class="nav-link">Property Signals</a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Playbooks</div>
+          <a href="#" class="nav-link">Seller Outreach Scripts</a>
+          <a href="#" class="nav-link">Deal Evaluation</a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Account</div>
+          <a href="#" class="nav-link">Plan & Billing</a>
+          <a href="#" class="nav-link">Profile & Access</a>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <!-- TOPBAR -->
+        <div class="topbar">
+          <div class="topbar-left">
+            <div class="topbar-title">Jacksonville Deal Feed</div>
+            <div class="topbar-badges">
+              <span class="badge market">North Florida</span>
+              <span class="badge tier">Analyst Tier</span>
+            </div>
+            <div class="topbar-meta">Signals updated Today • <span id="current-time"></span></div>
+          </div>
+          <div class="topbar-right">
+            <div class="status-pill live">Live Signals On</div>
+            <div class="user-chip">
+              <div class="user-avatar">N</div>
+              <div class="user-info">
+                <div class="user-name">NWM Investor</div>
+                <div class="user-email">investor@example.com</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div class="content-area">
+          <!-- KPI ROW -->
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-label">Qualified Streets On Radar</div>
+              <div class="kpi-value">34</div>
+              <div class="kpi-subtext trend-up">▲ +6 this week</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Off-Market-Likely Properties</div>
+              <div class="kpi-value">112</div>
+              <div class="kpi-subtext">Based on permits, violations, and ownership patterns.</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">High-Confidence Signals</div>
+              <div class="kpi-value">19</div>
+              <div class="kpi-subtext trend-up">▲ +4 new in last 7 days</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Your Focus Zones</div>
+              <div class="kpi-value">3</div>
+              <div class="kpi-subtext">Arlington • Westside • Northside</div>
+            </div>
+          </div>
+
+          <!-- MAIN GRID -->
+          <div class="two-col-grid">
+            <!-- HOT STREETS TABLE -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-header-left">
+                  <div class="card-title">Top Hot Streets – This Week</div>
+                  <div class="card-subtitle">Ranked by combined permit + distress + investor activity</div>
+                </div>
+                <div class="card-header-chip">Beta View</div>
+              </div>
+              <div class="card-body" style="padding: 0;">
+                <table id="hot-streets-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Street</th>
+                      <th>Submarket</th>
+                      <th>Signal Score</th>
+                      <th>Trend</th>
+                      <th>Heat</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- LATEST SIGNALS & ALERTS -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-header-left">
+                  <div class="card-title">Latest Signals</div>
+                  <div class="card-subtitle">Newest permits, violations, and events hitting your radar</div>
+                </div>
+                <div class="card-header-chip">Last 7 days</div>
+              </div>
+              <div class="card-body" style="padding: 0;">
+                <table id="signals-table">
+                  <thead>
+                    <tr>
+                      <th>Address</th>
+                      <th>Type</th>
+                      <th>Date</th>
+                      <th>Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="card-body">
+                <div style="border-top: 1px solid var(--border-subtle); padding-top: 24px; margin-top: 0;">
+                  <div style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Alerts & Recommended Moves</div>
+                  <div id="alerts-list" class="alerts-list">
+                    <!-- Populated by JS -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECOND ROW: MAP + PLAYBOOKS -->
+          <div class="two-col-grid">
+            <!-- HEAT MAP -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-header-left">
+                  <div class="card-title">Heat Map – North Florida Focus</div>
+                  <div class="card-subtitle">Visual overview of where signals are clustering</div>
+                </div>
+                <div class="card-header-chip">Map Integration Coming</div>
+              </div>
+              <div class="card-body">
+                <div class="heat-map-container">
+                  <div class="heat-map-grid">
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell medium"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell hot"></div>
+                    <div class="heat-cell hot"></div>
+                    <div class="heat-cell medium"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell emerging"></div>
+                    <div class="heat-cell medium"></div>
+                    <div class="heat-cell hot"></div>
+                    <div class="heat-cell medium"></div>
+                    <div class="heat-cell emerging"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell medium"></div>
+                    <div class="heat-cell emerging"></div>
+                    <div class="heat-cell emerging"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell emerging"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell emerging"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                    <div class="heat-cell"></div>
+                  </div>
+                  <div class="heat-legend">
+                    <div class="legend-item">
+                      <div class="legend-dot" style="background: var(--accent-red);"></div>
+                      <span>High</span>
+                    </div>
+                    <div class="legend-item">
+                      <div class="legend-dot" style="background: var(--accent-gold);"></div>
+                      <span>Medium</span>
+                    </div>
+                    <div class="legend-item">
+                      <div class="legend-dot" style="background: var(--accent-green);"></div>
+                      <span>Emerging</span>
+                    </div>
+                  </div>
+                  <div class="map-footer">
+                    Future: live tiles from your Sheets/API feed
+                  </div>
+                  <a href="#" class="btn">View Hot Streets List →</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- PLAYBOOKS -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-header-left">
+                  <div class="card-title">Action Playbooks</div>
+                  <div class="card-subtitle">Use these when a street or property hits your radar</div>
+                </div>
+                <div class="card-header-chip">Analyst Tier</div>
+              </div>
+              <div class="card-body">
+                <div class="playbook-list" id="playbooks-list">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ===== ADMIN PORTAL ROOT ===== -->
+  <div id="admin-portal-root" class="hidden">
+    <div class="dashboard-container">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="brand-block">
+          <div class="brand-logo">NR</div>
+          <div class="brand-title">Admin Console</div>
+          <div class="brand-subtitle">NWM Deal Radar</div>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <a href="#" class="nav-link active">Dashboard</a>
+          <a href="#" class="nav-link">Waitlist Leads</a>
+          <a href="#" class="nav-link">Subscribers & Plans</a>
+          <a href="#" class="nav-link">Activity Log</a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Settings</div>
+          <a href="#" class="nav-link">Configuration</a>
+          <a href="#" class="nav-link">Integrations</a>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <!-- TOPBAR -->
+        <div class="topbar">
+          <div class="topbar-left">
+            <div class="topbar-title">Admin – NWM Deal Radar</div>
+            <div class="topbar-badges">
+              <span class="badge owner">Owner</span>
+              <span class="badge tier">Beta Ops</span>
+            </div>
+            <div class="topbar-meta">Backend ready for Google Apps Script integration</div>
+          </div>
+          <div class="topbar-right">
+            <div class="user-chip">
+              <div class="user-avatar">N</div>
+              <div class="user-info">
+                <div class="user-name">Noah</div>
+                <div class="user-email">admin@nwmcreativeworks.com</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div class="content-area">
+          <!-- ADMIN KPI ROW -->
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-label">Total Waitlist Leads</div>
+              <div class="kpi-value">87</div>
+              <div class="kpi-subtext trend-up">▲ +12 this week</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Active Subscribers</div>
+              <div class="kpi-value">3</div>
+              <div class="kpi-subtext">Early beta testers</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">MRR (Mock)</div>
+              <div class="kpi-value">$0</div>
+              <div class="kpi-subtext">Ready for Stripe/Square integration</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Markets On Radar</div>
+              <div class="kpi-value">1</div>
+              <div class="kpi-subtext">North Florida (Jacksonville)</div>
+            </div>
+          </div>
+
+          <!-- WAITLIST LEADS TABLE -->
+          <div class="card mb-32">
+            <div class="card-header">
+              <div class="card-header-left">
+                <div class="card-title">Waitlist Leads</div>
+                <div class="card-subtitle">All leads captured from landing page and outreach</div>
+              </div>
+              <div class="card-header-chip">Ready for Apps Script</div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <table id="admin-waitlist-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Plan</th>
+                    <th>Source</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SUBSCRIBERS & PLANS TABLE -->
+          <div class="card mb-32">
+            <div class="card-header">
+              <div class="card-header-left">
+                <div class="card-title">Subscribers & Plans</div>
+                <div class="card-subtitle">Active and pending subscribers with billing info</div>
+              </div>
+              <div class="card-header-chip">Mock Data</div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <table id="admin-subscribers-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Plan</th>
+                    <th>Start Date</th>
+                    <th>Next Renewal</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ACTIVITY LOG -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-header-left">
+                <div class="card-title">Activity Log</div>
+                <div class="card-subtitle">Recent user and system actions</div>
+              </div>
+              <div class="card-header-chip">Live Feed</div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <table id="admin-activity-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Detail</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // ===== MOCK DATA =====
+
+    // User Dashboard Mock Data
+    const hotStreetsData = [
+      { rank: 1, street: "University Blvd N", submarket: "Arlington", score: 92, trend: "+12", heat: "hot" },
+      { rank: 2, street: "Edgewood Ave W", submarket: "Westside", score: 88, trend: "+8", heat: "hot" },
+      { rank: 3, street: "Moncrief Rd", submarket: "Northside", score: 84, trend: "+15", heat: "hot" },
+      { rank: 4, street: "Spring Park Rd", submarket: "Arlington", score: 79, trend: "+6", heat: "warm" },
+      { rank: 5, street: "Lane Ave S", submarket: "Westside", score: 76, trend: "+4", heat: "warm" },
+      { rank: 6, street: "Kings Rd", submarket: "Riverside", score: 71, trend: "+9", heat: "warm" },
+      { rank: 7, street: "McDuff Ave S", submarket: "Westside", score: 68, trend: "+2", heat: "emerging" },
+      { rank: 8, street: "Atlantic Blvd", submarket: "Beaches", score: 65, trend: "+5", heat: "emerging" },
+    ];
+
+    const signalsData = [
+      { address: "1234 University Blvd N", type: "Permit", date: "2025-11-22", street: "University Blvd N", score: 94 },
+      { address: "5678 Edgewood Ave W", type: "Violation", date: "2025-11-21", street: "Edgewood Ave W", score: 88 },
+      { address: "9101 Moncrief Rd", type: "Sale", date: "2025-11-20", street: "Moncrief Rd", score: 91 },
+      { address: "1122 Spring Park Rd", type: "Permit", date: "2025-11-19", street: "Spring Park Rd", score: 82 },
+      { address: "3344 Lane Ave S", type: "Lien", date: "2025-11-18", street: "Lane Ave S", score: 76 },
+      { address: "5566 Kings Rd", type: "Transfer", date: "2025-11-17", street: "Kings Rd", score: 79 },
+    ];
+
+    const alertsData = [
+      {
+        tag: "High Priority",
+        timestamp: "Updated 2 hours ago",
+        title: "University Blvd N hitting critical mass",
+        body: "3 new permits + 2 violations in the last 48 hours. Consider reaching out to adjacent owners."
+      },
+      {
+        tag: "Watch List",
+        timestamp: "Updated 1 day ago",
+        title: "Westside corridor showing early signs",
+        body: "Edgewood Ave W and Lane Ave S both trending up. Monitor for clustering patterns."
+      },
+      {
+        tag: "Emerging Zone",
+        timestamp: "Updated 3 days ago",
+        title: "Northside Moncrief Rd gaining momentum",
+        body: "Investor activity up 15% this week. Good time to scout for off-market deals."
+      },
+    ];
+
+    const playbooksData = [
+      {
+        tag: "Outreach • Off-Market",
+        title: "Warm Letter + Follow-Up Call (Owner Occupied)",
+        body: "Send personalized letter expressing interest, wait 5-7 days, then call. Reference specific property condition or neighborhood improvements."
+      },
+      {
+        tag: "Analysis • Hold vs. Flip",
+        title: "Quick Deal Evaluation Framework",
+        body: "Run comps, estimate repair costs, calculate ARV. Compare to 70% rule for flip or 1% rule for rental. Factor in days on market trends."
+      },
+      {
+        tag: "Negotiation • Distressed",
+        title: "Lien + Violation Outreach Strategy",
+        body: "Approach with solution mindset. Offer to help resolve violations or pay off liens as part of purchase. Build trust before presenting offer."
+      },
+      {
+        tag: "Market Intel • Trends",
+        title: "Street-Level Activity Monitoring",
+        body: "Track permit trends weekly, cross-reference with tax data, and identify ownership patterns. Look for repeat investors or institutional buyers."
+      },
+    ];
+
+    // Admin Portal Mock Data
+    const adminWaitlistMock = [
+      { timestamp: "2025-11-22 14:32", name: "Sarah Mitchell", email: "sarah.m@example.com", phone: "(904) 555-0123", plan: "Analyst", source: "Landing Page", status: "new" },
+      { timestamp: "2025-11-22 09:15", name: "Marcus Johnson", email: "mjohnson@example.com", phone: "(904) 555-0456", plan: "Pro", source: "Referral", status: "contacted" },
+      { timestamp: "2025-11-21 16:48", name: "Amanda Chen", email: "a.chen@example.com", phone: "(904) 555-0789", plan: "Analyst", source: "Facebook Ad", status: "new" },
+      { timestamp: "2025-11-20 11:22", name: "Robert Hayes", email: "r.hayes@example.com", phone: "(904) 555-0321", plan: "Pro", source: "LinkedIn", status: "converted" },
+      { timestamp: "2025-11-19 13:05", name: "Jennifer Park", email: "jpark@example.com", phone: "(904) 555-0654", plan: "Enterprise", source: "Direct Outreach", status: "contacted" },
+      { timestamp: "2025-11-18 10:33", name: "David Thompson", email: "dthompson@example.com", phone: "(904) 555-0987", plan: "Analyst", source: "Landing Page", status: "closed" },
+      { timestamp: "2025-11-17 15:18", name: "Lisa Rodriguez", email: "l.rodriguez@example.com", phone: "(904) 555-0147", plan: "Pro", source: "Google Ads", status: "new" },
+      { timestamp: "2025-11-16 09:44", name: "Kevin Zhang", email: "kzhang@example.com", phone: "(904) 555-0258", plan: "Analyst", source: "Referral", status: "contacted" },
+    ];
+
+    const adminSubscribersMock = [
+      { name: "NWM Investor", email: "investor@example.com", plan: "Analyst", startDate: "2025-11-01", nextRenewal: "2025-12-01", status: "active" },
+      { name: "Robert Hayes", email: "r.hayes@example.com", plan: "Pro", startDate: "2025-11-15", nextRenewal: "2025-12-15", status: "active" },
+      { name: "Test User Beta", email: "beta@example.com", plan: "Analyst", startDate: "2025-10-15", nextRenewal: "2025-11-15", status: "pending" },
+    ];
+
+    const adminActivityMock = [
+      { time: "2025-11-22 14:32", user: "Sarah Mitchell", action: "Joined waitlist", detail: "Analyst plan via Landing Page" },
+      { time: "2025-11-22 09:15", user: "Marcus Johnson", action: "Status updated", detail: "New → Contacted" },
+      { time: "2025-11-21 16:48", user: "Amanda Chen", action: "Joined waitlist", detail: "Analyst plan via Facebook Ad" },
+      { time: "2025-11-20 11:22", user: "Robert Hayes", action: "Upgraded to Pro", detail: "Converted from waitlist" },
+      { time: "2025-11-19 10:05", user: "NWM Investor", action: "Downloaded report", detail: "Hot Streets - Arlington Zone" },
+      { time: "2025-11-18 15:33", user: "Test User Beta", action: "Login", detail: "Accessed dashboard" },
+      { time: "2025-11-17 12:18", user: "Lisa Rodriguez", action: "Joined waitlist", detail: "Pro plan via Google Ads" },
+    ];
+
+    // ===== RENDER FUNCTIONS =====
+
+    function renderHotStreets(data) {
+      const tbody = document.querySelector('#hot-streets-table tbody');
+      tbody.innerHTML = '';
+
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color: var(--text-muted);">${row.rank}</td>
+          <td style="font-weight: 600;">${row.street}</td>
+          <td>${row.submarket}</td>
+          <td><span class="score-badge">${row.score}</span></td>
+          <td class="text-trend-up">${row.trend}</td>
+          <td><span class="pill ${row.heat}">${row.heat.toUpperCase()}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderSignals(data) {
+      const tbody = document.querySelector('#signals-table tbody');
+      tbody.innerHTML = '';
+
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 500;">${row.address}</td>
+          <td><span class="pill emerging">${row.type}</span></td>
+          <td style="color: var(--text-muted); font-size: 13px;">${row.date}</td>
+          <td><span class="score-badge">${row.score}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderAlerts(data) {
+      const container = document.getElementById('alerts-list');
+      container.innerHTML = '';
+
+      data.forEach(alert => {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert-item';
+        alertDiv.innerHTML = `
+          <div class="alert-header">
+            <span class="alert-tag">${alert.tag}</span>
+            <span class="alert-timestamp">${alert.timestamp}</span>
+          </div>
+          <div class="alert-title">${alert.title}</div>
+          <div class="alert-body">${alert.body}</div>
+        `;
+        container.appendChild(alertDiv);
+      });
+    }
+
+    function renderPlaybooks(data) {
+      const container = document.getElementById('playbooks-list');
+      container.innerHTML = '';
+
+      data.forEach(playbook => {
+        const playbookDiv = document.createElement('div');
+        playbookDiv.className = 'playbook-card';
+        playbookDiv.innerHTML = `
+          <span class="playbook-tag">${playbook.tag}</span>
+          <div class="playbook-title">${playbook.title}</div>
+          <div class="playbook-body">${playbook.body}</div>
+        `;
+        container.appendChild(playbookDiv);
+      });
+    }
+
+    function renderAdminWaitlist(data) {
+      const tbody = document.querySelector('#admin-waitlist-table tbody');
+      tbody.innerHTML = '';
+
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color: var(--text-muted); font-size: 13px;">${row.timestamp}</td>
+          <td style="font-weight: 500;">${row.name}</td>
+          <td>${row.email}</td>
+          <td style="color: var(--text-muted);">${row.phone}</td>
+          <td><span class="pill tier">${row.plan}</span></td>
+          <td style="color: var(--text-muted); font-size: 13px;">${row.source}</td>
+          <td><span class="pill ${row.status}">${row.status.toUpperCase()}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderAdminSubscribers(data) {
+      const tbody = document.querySelector('#admin-subscribers-table tbody');
+      tbody.innerHTML = '';
+
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 500;">${row.name}</td>
+          <td>${row.email}</td>
+          <td><span class="pill tier">${row.plan}</span></td>
+          <td style="color: var(--text-muted); font-size: 13px;">${row.startDate}</td>
+          <td style="color: var(--text-muted); font-size: 13px;">${row.nextRenewal}</td>
+          <td><span class="pill ${row.status}">${row.status.toUpperCase()}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderAdminActivity(data) {
+      const tbody = document.querySelector('#admin-activity-table tbody');
+      tbody.innerHTML = '';
+
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color: var(--text-muted); font-size: 13px;">${row.time}</td>
+          <td style="font-weight: 500;">${row.user}</td>
+          <td>${row.action}</td>
+          <td style="color: var(--text-muted);">${row.detail}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ===== GOOGLE APPS SCRIPT INTEGRATION HOOKS =====
+
+    // USER DASHBOARD ENDPOINTS
+    async function fetchUserDashboardData() {
+      // TODO: Replace with live Apps Script endpoint
+      // Example:
+      // const res = await fetch("YOUR_USER_DASHBOARD_WEB_APP_URL");
+      // const data = await res.json();
+      // return data;
+
+      // For now, return mock data
+      return {
+        hotStreets: hotStreetsData,
+        signals: signalsData,
+        alerts: alertsData,
+        playbooks: playbooksData
+      };
+    }
+
+    async function fetchUserActivity() {
+      // TODO: Reserved for future timeline/activity feed
+      // const res = await fetch("YOUR_USER_ACTIVITY_URL");
+      // return await res.json();
+    }
+
+    // ADMIN PORTAL ENDPOINTS
+    async function fetchAdminWaitlist() {
+      // TODO: GET from Google Apps Script (NWM Deal Radar – Waitlist Leads)
+      // Example:
+      // const res = await fetch("YOUR_ADMIN_WAITLIST_WEB_APP_URL");
+      // const data = await res.json();
+      // return data;
+
+      return adminWaitlistMock;
+    }
+
+    async function fetchAdminSubscribers() {
+      // TODO: GET from another Apps Script / Sheet
+      // const res = await fetch("YOUR_ADMIN_SUBSCRIBERS_URL");
+      // return await res.json();
+
+      return adminSubscribersMock;
+    }
+
+    async function fetchAdminMetrics() {
+      // TODO: GET aggregated metrics for KPIs
+      // const res = await fetch("YOUR_ADMIN_METRICS_URL");
+      // return await res.json();
+
+      return {
+        totalLeads: 87,
+        activeSubscribers: 3,
+        mrr: 0,
+        markets: 1
+      };
+    }
+
+    async function fetchAdminActivity() {
+      // TODO: GET activity log from Apps Script
+      // const res = await fetch("YOUR_ADMIN_ACTIVITY_URL");
+      // return await res.json();
+
+      return adminActivityMock;
+    }
+
+    // ===== INITIALIZATION =====
+
+    function updateCurrentTime() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const timeElement = document.getElementById('current-time');
+      if (timeElement) {
+        timeElement.textContent = `${hours}:${minutes}`;
+      }
+    }
+
+    async function initUserDashboard() {
+      const data = await fetchUserDashboardData();
+      renderHotStreets(data.hotStreets);
+      renderSignals(data.signals);
+      renderAlerts(data.alerts);
+      renderPlaybooks(data.playbooks);
+      updateCurrentTime();
+    }
+
+    async function initAdminPortal() {
+      const waitlist = await fetchAdminWaitlist();
+      const subscribers = await fetchAdminSubscribers();
+      const activity = await fetchAdminActivity();
+
+      renderAdminWaitlist(waitlist);
+      renderAdminSubscribers(subscribers);
+      renderAdminActivity(activity);
+    }
+
+    // ===== ROLE SWITCHER =====
+
+    function switchRole(role) {
+      const userRoot = document.getElementById('user-dashboard-root');
+      const adminRoot = document.getElementById('admin-portal-root');
+
+      if (role === 'user') {
+        userRoot.classList.remove('hidden');
+        adminRoot.classList.add('hidden');
+      } else if (role === 'admin') {
+        userRoot.classList.add('hidden');
+        adminRoot.classList.remove('hidden');
+      }
+    }
+
+    document.getElementById('role-select').addEventListener('change', (e) => {
+      switchRole(e.target.value);
+    });
+
+    // ===== LOAD ON PAGE READY =====
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initUserDashboard();
+      initAdminPortal();
+
+      // Update time every minute
+      setInterval(updateCurrentTime, 60000);
+    });
+  </script>
+
+</body>
+</html>

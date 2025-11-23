@@ -961,9 +961,252 @@
       overflow-x: hidden;
     }
 
+    /* ===== MODAL DIALOGS ===== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(2, 6, 23, 0.9);
+      backdrop-filter: blur(4px);
+      z-index: 9998;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .modal-close {
+      background: var(--bg-card-soft);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      background: var(--accent-red);
+      color: white;
+      border-color: var(--accent-red);
+    }
+
+    .modal-body {
+      margin-bottom: 24px;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    /* ===== FORM STYLES ===== */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-field label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      background: var(--bg-card-soft);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .form-field textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+
+    /* ===== BUTTON STYLES ===== */
+    .btn-primary {
+      background: var(--accent-primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #ea580c;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card-soft);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-card);
+      border-color: var(--accent-primary);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid var(--accent-red);
+      color: var(--accent-red);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-danger:hover {
+      background: var(--accent-red);
+      color: white;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .btn-icon {
+      padding: 8px;
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ===== TABLE ACTIONS ===== */
+    .table-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    /* ===== CARD HEADER ACTIONS ===== */
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    /* ===== STATUS INDICATORS ===== */
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-indicator.enabled {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--accent-green);
+    }
+
+    .status-indicator.disabled {
+      background: rgba(156, 163, 175, 0.15);
+      color: var(--text-muted);
+    }
+
+    .status-indicator::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
     @media (max-width: 768px) {
       .login-container {
         padding: 32px 24px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        padding: 24px;
       }
     }
   </style>
@@ -1302,6 +1545,12 @@
         </div>
 
         <div class="nav-section">
+          <div class="nav-section-title">Management</div>
+          <a href="#" class="nav-link">User Management</a>
+          <a href="#" class="nav-link">Data Sources</a>
+        </div>
+
+        <div class="nav-section">
           <div class="nav-section-title">Settings</div>
           <a href="#" class="nav-link">Configuration</a>
           <a href="#" class="nav-link">Integrations</a>
@@ -1415,7 +1664,7 @@
           </div>
 
           <!-- ACTIVITY LOG -->
-          <div class="card">
+          <div class="card mb-32">
             <div class="card-header">
               <div class="card-header-left">
                 <div class="card-title">Activity Log</div>
@@ -1440,8 +1689,195 @@
             </div>
           </div>
 
+          <!-- USER MANAGEMENT -->
+          <div class="card mb-32">
+            <div class="card-header">
+              <div class="card-header-left">
+                <div class="card-title">User Management</div>
+                <div class="card-subtitle">Manage platform users and access levels</div>
+              </div>
+              <div class="card-actions">
+                <button class="btn-primary btn-small" onclick="openUserModal()">+ Add User</button>
+              </div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <table id="users-table">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Tier</th>
+                    <th>Created</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- DATA SOURCES -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-header-left">
+                <div class="card-title">Data Sources</div>
+                <div class="card-subtitle">Configure external data feeds and API connections</div>
+              </div>
+              <div class="card-actions">
+                <button class="btn-primary btn-small" onclick="openSourceModal()">+ Add Source</button>
+              </div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <table id="sources-table">
+                <thead>
+                  <tr>
+                    <th>Source Name</th>
+                    <th>Type</th>
+                    <th>Endpoint/URL</th>
+                    <th>Last Sync</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
       </main>
+    </div>
+  </div>
+
+  <!-- ===== MODAL DIALOGS ===== -->
+
+  <!-- USER MANAGEMENT MODAL -->
+  <div class="modal-overlay" id="userModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="userModalTitle">Add New User</div>
+        <button class="modal-close" onclick="closeUserModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="userForm">
+          <input type="hidden" id="userId">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="userUsername">Username *</label>
+              <input type="text" id="userUsername" required placeholder="Enter username">
+            </div>
+            <div class="form-field">
+              <label for="userEmail">Email *</label>
+              <input type="email" id="userEmail" required placeholder="user@example.com">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="userPassword">Password *</label>
+              <input type="password" id="userPassword" required placeholder="••••••••">
+            </div>
+            <div class="form-field">
+              <label for="userTier">Tier *</label>
+              <select id="userTier" required>
+                <option value="">Select tier</option>
+                <option value="scout">Scout</option>
+                <option value="analyst">Analyst</option>
+                <option value="pro">Pro</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-field">
+              <label for="userStatus">Status</label>
+              <select id="userStatus">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeUserModal()">Cancel</button>
+        <button class="btn-primary" onclick="saveUser()">Save User</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA SOURCE MODAL -->
+  <div class="modal-overlay" id="sourceModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="sourceModalTitle">Add Data Source</div>
+        <button class="modal-close" onclick="closeSourceModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="sourceForm">
+          <input type="hidden" id="sourceId">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="sourceName">Source Name *</label>
+              <input type="text" id="sourceName" required placeholder="e.g., Duval County Permits">
+            </div>
+            <div class="form-field">
+              <label for="sourceType">Type *</label>
+              <select id="sourceType" required>
+                <option value="">Select type</option>
+                <option value="google-sheets">Google Sheets</option>
+                <option value="api">REST API</option>
+                <option value="database">Database</option>
+                <option value="csv">CSV Feed</option>
+                <option value="webhook">Webhook</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-field">
+              <label for="sourceEndpoint">Endpoint/URL *</label>
+              <input type="text" id="sourceEndpoint" required placeholder="https://...">
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-field">
+              <label for="sourceApiKey">API Key (optional)</label>
+              <input type="password" id="sourceApiKey" placeholder="Enter API key if required">
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-field">
+              <label for="sourceDescription">Description</label>
+              <textarea id="sourceDescription" placeholder="Brief description of this data source..."></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="sourceSyncInterval">Sync Interval</label>
+              <select id="sourceSyncInterval">
+                <option value="manual">Manual</option>
+                <option value="hourly">Hourly</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="sourceStatus">Status</label>
+              <select id="sourceStatus">
+                <option value="enabled">Enabled</option>
+                <option value="disabled">Disabled</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeSourceModal()">Cancel</button>
+        <button class="btn-primary" onclick="saveSource()">Save Source</button>
+      </div>
     </div>
   </div>
 
@@ -1641,8 +2077,333 @@
       if (confirm('Reset demo? This will clear all activity logs and log you out.')) {
         localStorage.removeItem('demoSession');
         localStorage.removeItem('activityLog');
+        localStorage.removeItem('platformUsers');
+        localStorage.removeItem('dataSources');
         location.reload();
       }
+    }
+
+    // ===== USER MANAGEMENT =====
+    function getUsers() {
+      const defaultUsers = [
+        {
+          id: 'usr_001',
+          username: 'admin',
+          email: 'admin@nwmcreativeworks.com',
+          tier: 'pro',
+          password: atob("YWRtaW4xMjM="),
+          created: '2025-11-01',
+          status: 'active'
+        },
+        {
+          id: 'usr_002',
+          username: 'user',
+          email: 'investor@example.com',
+          tier: 'scout',
+          password: atob("dXNlcjEyMw=="),
+          created: '2025-11-15',
+          status: 'active'
+        }
+      ];
+
+      const stored = localStorage.getItem('platformUsers');
+      return stored ? JSON.parse(stored) : defaultUsers;
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem('platformUsers', JSON.stringify(users));
+      renderUsersTable();
+    }
+
+    function renderUsersTable() {
+      const tbody = document.querySelector('#users-table tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+      const users = getUsers();
+
+      users.forEach(user => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 600;">${user.username}</td>
+          <td>${user.email}</td>
+          <td><span class="pill tier">${user.tier.toUpperCase()}</span></td>
+          <td style="color: var(--text-muted); font-size: 13px;">${user.created}</td>
+          <td><span class="pill ${user.status}">${user.status.toUpperCase()}</span></td>
+          <td>
+            <div class="table-actions">
+              <button class="btn-secondary btn-small btn-icon" onclick="editUser('${user.id}')" title="Edit">✏️</button>
+              <button class="btn-danger btn-small btn-icon" onclick="deleteUser('${user.id}')" title="Delete">🗑️</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openUserModal(userId = null) {
+      const modal = document.getElementById('userModal');
+      const form = document.getElementById('userForm');
+      form.reset();
+
+      if (userId) {
+        const users = getUsers();
+        const user = users.find(u => u.id === userId);
+        if (user) {
+          document.getElementById('userModalTitle').textContent = 'Edit User';
+          document.getElementById('userId').value = user.id;
+          document.getElementById('userUsername').value = user.username;
+          document.getElementById('userEmail').value = user.email;
+          document.getElementById('userTier').value = user.tier;
+          document.getElementById('userStatus').value = user.status;
+          document.getElementById('userPassword').required = false;
+          document.getElementById('userPassword').placeholder = 'Leave blank to keep current password';
+        }
+      } else {
+        document.getElementById('userModalTitle').textContent = 'Add New User';
+        document.getElementById('userPassword').required = true;
+        document.getElementById('userPassword').placeholder = '••••••••';
+      }
+
+      modal.classList.add('show');
+    }
+
+    function closeUserModal() {
+      document.getElementById('userModal').classList.remove('show');
+    }
+
+    function saveUser() {
+      const form = document.getElementById('userForm');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const userId = document.getElementById('userId').value;
+      const users = getUsers();
+
+      const userData = {
+        id: userId || `usr_${Date.now()}`,
+        username: document.getElementById('userUsername').value,
+        email: document.getElementById('userEmail').value,
+        tier: document.getElementById('userTier').value,
+        status: document.getElementById('userStatus').value,
+        created: userId ? users.find(u => u.id === userId).created : new Date().toISOString().split('T')[0]
+      };
+
+      const password = document.getElementById('userPassword').value;
+      if (password) {
+        userData.password = password;
+      } else if (userId) {
+        userData.password = users.find(u => u.id === userId).password;
+      }
+
+      if (userId) {
+        const index = users.findIndex(u => u.id === userId);
+        users[index] = userData;
+        logActivity('User Management', `Updated user: ${userData.username}`);
+      } else {
+        users.push(userData);
+        logActivity('User Management', `Created user: ${userData.username}`);
+      }
+
+      saveUsers(users);
+      closeUserModal();
+
+      // Update AUTH_CREDENTIALS if username/password changed
+      updateAuthCredentials();
+    }
+
+    function editUser(userId) {
+      openUserModal(userId);
+    }
+
+    function deleteUser(userId) {
+      const users = getUsers();
+      const user = users.find(u => u.id === userId);
+
+      if (!user) return;
+
+      if (confirm(`Delete user "${user.username}"? This action cannot be undone.`)) {
+        const filtered = users.filter(u => u.id !== userId);
+        saveUsers(filtered);
+        logActivity('User Management', `Deleted user: ${user.username}`);
+        updateAuthCredentials();
+      }
+    }
+
+    function updateAuthCredentials() {
+      const users = getUsers();
+      users.forEach(user => {
+        AUTH_CREDENTIALS[user.username] = user.password;
+        TIER_MAP[user.username] = user.tier;
+      });
+    }
+
+    // ===== DATA SOURCES MANAGEMENT =====
+    function getSources() {
+      const defaultSources = [
+        {
+          id: 'src_001',
+          name: 'Duval County Property Records',
+          type: 'google-sheets',
+          endpoint: 'https://docs.google.com/spreadsheets/d/EXAMPLE_ID/edit',
+          apiKey: '',
+          description: 'Live property transaction data from Duval County',
+          syncInterval: 'daily',
+          lastSync: '2025-11-23 04:00',
+          status: 'enabled'
+        },
+        {
+          id: 'src_002',
+          name: 'Jacksonville Permits API',
+          type: 'api',
+          endpoint: 'https://api.coj.net/permits/v1',
+          apiKey: '••••••••',
+          description: 'Building permits and violations feed',
+          syncInterval: 'hourly',
+          lastSync: '2025-11-23 05:00',
+          status: 'enabled'
+        }
+      ];
+
+      const stored = localStorage.getItem('dataSources');
+      return stored ? JSON.parse(stored) : defaultSources;
+    }
+
+    function saveSources(sources) {
+      localStorage.setItem('dataSources', JSON.stringify(sources));
+      renderSourcesTable();
+    }
+
+    function renderSourcesTable() {
+      const tbody = document.querySelector('#sources-table tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+      const sources = getSources();
+
+      sources.forEach(source => {
+        const tr = document.createElement('tr');
+        const statusClass = source.status === 'enabled' ? 'enabled' : 'disabled';
+
+        tr.innerHTML = `
+          <td style="font-weight: 600;">${source.name}</td>
+          <td><span class="pill cool">${source.type.toUpperCase()}</span></td>
+          <td style="font-size: 12px; color: var(--text-muted); max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${source.endpoint}</td>
+          <td style="color: var(--text-muted); font-size: 13px;">${source.lastSync || 'Never'}</td>
+          <td><span class="status-indicator ${statusClass}">${source.status}</span></td>
+          <td>
+            <div class="table-actions">
+              <button class="btn-secondary btn-small btn-icon" onclick="syncSource('${source.id}')" title="Sync Now">🔄</button>
+              <button class="btn-secondary btn-small btn-icon" onclick="editSource('${source.id}')" title="Edit">✏️</button>
+              <button class="btn-danger btn-small btn-icon" onclick="deleteSource('${source.id}')" title="Delete">🗑️</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openSourceModal(sourceId = null) {
+      const modal = document.getElementById('sourceModal');
+      const form = document.getElementById('sourceForm');
+      form.reset();
+
+      if (sourceId) {
+        const sources = getSources();
+        const source = sources.find(s => s.id === sourceId);
+        if (source) {
+          document.getElementById('sourceModalTitle').textContent = 'Edit Data Source';
+          document.getElementById('sourceId').value = source.id;
+          document.getElementById('sourceName').value = source.name;
+          document.getElementById('sourceType').value = source.type;
+          document.getElementById('sourceEndpoint').value = source.endpoint;
+          document.getElementById('sourceApiKey').value = source.apiKey || '';
+          document.getElementById('sourceDescription').value = source.description || '';
+          document.getElementById('sourceSyncInterval').value = source.syncInterval;
+          document.getElementById('sourceStatus').value = source.status;
+        }
+      } else {
+        document.getElementById('sourceModalTitle').textContent = 'Add Data Source';
+        document.getElementById('sourceSyncInterval').value = 'manual';
+        document.getElementById('sourceStatus').value = 'enabled';
+      }
+
+      modal.classList.add('show');
+    }
+
+    function closeSourceModal() {
+      document.getElementById('sourceModal').classList.remove('show');
+    }
+
+    function saveSource() {
+      const form = document.getElementById('sourceForm');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const sourceId = document.getElementById('sourceId').value;
+      const sources = getSources();
+
+      const sourceData = {
+        id: sourceId || `src_${Date.now()}`,
+        name: document.getElementById('sourceName').value,
+        type: document.getElementById('sourceType').value,
+        endpoint: document.getElementById('sourceEndpoint').value,
+        apiKey: document.getElementById('sourceApiKey').value,
+        description: document.getElementById('sourceDescription').value,
+        syncInterval: document.getElementById('sourceSyncInterval').value,
+        status: document.getElementById('sourceStatus').value,
+        lastSync: sourceId ? sources.find(s => s.id === sourceId).lastSync : null
+      };
+
+      if (sourceId) {
+        const index = sources.findIndex(s => s.id === sourceId);
+        sources[index] = sourceData;
+        logActivity('Data Sources', `Updated source: ${sourceData.name}`);
+      } else {
+        sources.push(sourceData);
+        logActivity('Data Sources', `Created source: ${sourceData.name}`);
+      }
+
+      saveSources(sources);
+      closeSourceModal();
+    }
+
+    function editSource(sourceId) {
+      openSourceModal(sourceId);
+    }
+
+    function deleteSource(sourceId) {
+      const sources = getSources();
+      const source = sources.find(s => s.id === sourceId);
+
+      if (!source) return;
+
+      if (confirm(`Delete data source "${source.name}"? This action cannot be undone.`)) {
+        const filtered = sources.filter(s => s.id !== sourceId);
+        saveSources(filtered);
+        logActivity('Data Sources', `Deleted source: ${source.name}`);
+      }
+    }
+
+    function syncSource(sourceId) {
+      const sources = getSources();
+      const source = sources.find(s => s.id === sourceId);
+
+      if (!source) return;
+
+      // Simulate sync
+      const now = new Date();
+      const timeStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      source.lastSync = timeStr;
+      saveSources(sources);
+      logActivity('Data Sources', `Synced source: ${source.name}`);
+
+      alert(`✅ Successfully synced "${source.name}"\n\nLast sync: ${timeStr}\n\nIn production, this would fetch live data from:\n${source.endpoint}`);
     }
 
     // ===== MOCK DATA =====
@@ -1958,6 +2719,13 @@
       renderAdminWaitlist(waitlist);
       renderAdminSubscribers(subscribers);
       renderAdminActivity(activity);
+
+      // Render management tables
+      renderUsersTable();
+      renderSourcesTable();
+
+      // Update auth credentials from stored users
+      updateAuthCredentials();
     }
 
     // ===== ROLE SWITCHER =====
